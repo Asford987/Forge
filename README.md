@@ -1,2 +1,2 @@
 # Forge
-C++ package manager
+Cargo like C++ package manager
