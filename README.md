@@ -7,6 +7,6 @@ Use .toml to manage makefile
 
 - Forge install (--global for global installation, default is project)
 - Forge publish
-- Forge build (--arch for defining pc architecture)
+- Forge build (--arch for defining pc architecture (if --bin), --lang for language integration (if --lib))
 - Forge run
 - Forge new (--bin (default) --lib)
