@@ -3,7 +3,7 @@ Cargo like C++ package manager and version control
 
 Allows seamless integration with other languages (Rust, Python, Go, Zig, ...)
 
-Use .toml to manage makefile
+Use .toml to manage CMakeLists.txt
 
 - Forge install (--global for global installation, default is project)
 - Forge publish
