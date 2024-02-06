@@ -5,10 +5,13 @@ namespace argparse{
         this->help_msg = help_msg;
     }
 
-    void ArgumentParser::add_argument(std::string shortName, std::string longName, int nargs, std::string help, bool required, std::string action)
-    {
+    void ArgumentParser::add_argument(std::string shortName, std::string longName, int nargs, std::string help, bool required, std::string action){
         Argument arg = Argument(shortName, longName, nargs, help, required, action);
         this->arguments[longName] = arg;
+    }
+
+    void ArgumentParser::set_help_msg(std::string help_msg){
+        this->help_msg = help_msg;
     }
 
     void ArgumentParser::print_help(){
@@ -124,7 +127,13 @@ namespace argparse{
         return this->arguments[longName].value;
     }
 
-    void ArgumentNamespace::print(){
+    std::vector<std::string> ArgumentNamespace::operator[](std::string longName){
+        return this->arguments[longName].value;
+    }
+
+        void
+        ArgumentNamespace::print()
+    {
         for(auto const& [key, val] : this->arguments){
             std::cout << key << " : ";
             for(auto v: val.value){

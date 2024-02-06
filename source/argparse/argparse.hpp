@@ -51,6 +51,7 @@ namespace argparse{
             ArgumentNamespace(std::map<std::string, Argument> args);
             std::vector<std::string> get_value(std::string longName);
             void print();
+            std::vector<std::string> operator[](std::string longName);
     };
     
     class ArgumentParser{
@@ -60,8 +61,9 @@ namespace argparse{
 
         public:
             ArgumentParser(std::string help_msg);
-            void add_argument(std::string shortName, std::string longName, int nargs = 0, std::string help = "", bool required = false, std::string action = "store_true"); // if nargs=0, type=action
+            void add_argument(std::string shortName, std::string longName, int nargs = 0, std::string help = "", bool required = false, std::string action = ""); // if nargs=0, type=action
             void print_help();
+            void set_help_msg(std::string help_msg);
             ArgumentNamespace parse_args(int argc, char **argv);
     };
 }
