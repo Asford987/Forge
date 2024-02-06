@@ -7,6 +7,10 @@
 #include <stdexcept>
 #include <map>
 #include "../argparse/argparse.hpp"
+#include "../executables/createProj.hpp"
+#include "../executables/installPackage.hpp"
+#include "../executables/publish.hpp"
+#include "../executables/runProj.hpp"
 
 
 namespace Forge{
