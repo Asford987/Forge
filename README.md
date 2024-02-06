@@ -1,5 +1,5 @@
 # Forge
-Cargo like C++ package manager and version control
+Cargo like C++ project manager
 
 Allows seamless integration with other languages (Rust, Python, Go, Zig, ...)
 

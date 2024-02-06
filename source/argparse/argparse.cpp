@@ -107,9 +107,9 @@ namespace argparse{
 
     void Argument::action(){
         if(this->action_ == "store_true"){
-            this->value.push_back("true");
+            this->value.push_back("1");
         } else if(this->action_ == "store_false"){
-            this->value.push_back("false");
+            this->value.push_back("0");
         } 
     }
 
