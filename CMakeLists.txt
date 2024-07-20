@@ -1,6 +1,11 @@
-cmake_minimum_required(VERSION 3.27.7)
+cmake_minimum_required(VERSION 3.28.3)
 
 project(forge)
+
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 add_subdirectory(libs/CLI11)
 add_subdirectory(libs/tomlplusplus)
