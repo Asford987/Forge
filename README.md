@@ -11,3 +11,5 @@ Cargo like C++ project manager
 - Forge build (--arch for defining pc architecture)
 - Forge run
 - Forge new (--bin (default) --lib)
+
+<!-- For writing the CMakeLists.txt: sharding mechanism inplemented (CMakeLists.txt is split in several sections, each being changed by each command, and once build/run is called, CMakeLists.txt will be composed and then ran) -->
