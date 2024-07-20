@@ -39,6 +39,8 @@ int main(int argc, char** argv){
   new_proj->callback([&]() {
     std::cout << new_proj->get_option("name")->as<std::string>() << std::endl;
     std::cout << lib_flag << std::endl;
+
+    Forge::New(proj_name, lib_flag).create_project();
   });
 
   
@@ -56,6 +58,8 @@ int main(int argc, char** argv){
 
   build_proj->callback([&]() {
     std::cout << kubernetes_flag << " " << docker_flag << " " << arch << " " << target << " " << mode << std::endl;
+  
+    Forge::Build(kubernetes_flag, docker_flag, arch, target, mode).build_project();
   });
 
 
@@ -71,6 +75,8 @@ int main(int argc, char** argv){
   
   run_proj->callback([&]() {
     std::cout << kubernetes_flag << " " << docker_flag << " " << arch << " " << target << " " << mode << std::endl;
+
+    Forge::Run(kubernetes_flag, docker_flag, arch, target, mode).run_project();
   });
 
 
@@ -85,16 +91,22 @@ int main(int argc, char** argv){
 
   install_proj->callback([&]() {
     std::cout << install_proj->get_option("library")->as<std::string>() << " " << github_flag << std::endl;
+
+    Forge::Install(install_proj->get_option("library")->as<std::string>(), github_flag).install_package();
   });
 
 
   uninstall_proj->add_option("library")->required();
   uninstall_proj->callback([&]() {
     std::cout << uninstall_proj->get_option("library")->as<std::string>() << std::endl;
+  
+    Forge::Uninstall(uninstall_proj->get_option("library")->as<std::string>()).uninstall_package();
   });
 
 
-  analyze_proj->callback([&]() {});
+  analyze_proj->callback([&]() {
+    Forge::Analyze().analyze_code();
+  });
 
 
   bool global_flag = false;
@@ -102,12 +114,17 @@ int main(int argc, char** argv){
   config_proj->add_flag("-g", global_flag, "Set global configuration");
   config_proj->add_option("key", key, "Key for the configuration");
   config_proj->add_option("value", value, "Value for the configuration");
+  
   config_proj->callback([&]() {
     std::cout << key << " " << value << " " << global_flag << std::endl;
+
+    Forge::Config(key, value, global_flag).set_config();
   });
 
 
-  publish_proj->callback([&]() {});
+  publish_proj->callback([&]() {
+    Forge::Publish("dfd").publish_package();
+  });
 
 
   CLI11_PARSE(app, argc, argv);
