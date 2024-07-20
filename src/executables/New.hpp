@@ -1,7 +1,9 @@
 
 
-
 namespace Forge
 {
-  class Publish{};
+  class New{
+
+  };
+
 } // namespace Forge

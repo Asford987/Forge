@@ -3,5 +3,5 @@
 
 namespace Forge
 {
-  class Publish{};
+  class Config{};
 } // namespace Forge

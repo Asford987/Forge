@@ -10,4 +10,7 @@ namespace Forge
 
   void remove_lib_from_cmakelists();
 
+  class Install{};
+  class Uninstall{};
+
 } // namespace Forge

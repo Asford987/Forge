@@ -3,5 +3,7 @@
 
 namespace Forge
 {
-  class Publish{};
+  class Test{};
+  class Bench{};
+  
 } // namespace Forge

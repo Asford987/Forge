@@ -9,28 +9,13 @@
 #include <CLI/CLI.hpp>
 #include <toml++/toml.h>
 #include "executables/utils.hpp"
-
-
-namespace Forge{
-  std::string global_help_msg(
-    "Usage: forge <option>\n"
-    "Options:\n"
-    "  new            Create a new project\n"
-    "  build          Build the project\n"
-    "  run            Run the project\n"
-    "  test           Run the tests\n"
-    "  install        Install a package\n"
-    "  bench          Run the benchmarks\n"
-    "  uninstall      Uninstall a package\n"
-    "  analyze        Analyze the code for easy vulnerabilities\n"
-    "  config         Set configuration for the project or globally\n"
-    "  publish        Publish the project (To be added)\n"
-    "  -h, --help     Display this information\n"
-    "  -v, --version  Display the version\n"
-  );
-
-
-} // namespace Forge
+#include "executables/Analyze.hpp"
+#include "executables/Build.hpp"
+#include "executables/Config.hpp"
+#include "executables/New.hpp"
+#include "executables/Test.hpp"
+#include "executables/Install.hpp"
+#include "executables/Publish.hpp"
 
 
 int main(int argc, char** argv){

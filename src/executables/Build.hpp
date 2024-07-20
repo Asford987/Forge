@@ -3,5 +3,7 @@
 
 namespace Forge
 {
-  class Publish{};
+  class Build{};
+  class Run{};
+  
 } // namespace Forge
