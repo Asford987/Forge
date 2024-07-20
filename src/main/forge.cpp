@@ -22,7 +22,7 @@ namespace Forge{
     "  install        Install a package\n"
     "  bench          Run the benchmarks\n"
     "  uninstall      Uninstall a package\n"
-    "  analyze        Analyze the code for vulnerabilities\n"
+    "  analyze        Analyze the code for easy vulnerabilities\n"
     "  config         Set configuration for the project or globally\n"
     "  publish        Publish the project (To be added)\n"
     "  -h, --help     Display this information\n"
@@ -32,11 +32,12 @@ namespace Forge{
 
 } // namespace Forge
 
+
 int main(int argc, char** argv){
   CLI::App app{"forge - A cargo-like C++ Project Manager"};
-  std::map<std::string, std::string> config = Forge::get_config();
-  app.set_help_flag("--help");
-  app.set_version_flag("--version");
+  // std::map<std::string, std::string> config = Forge::get_config();
+  // app.set_help_flag("--help");
+  // app.set_version_flag("--version");
   auto new_proj = app.add_subcommand("new", "Create a new project");
   auto build_proj = app.add_subcommand("build", "Build the project");
   auto run_proj = app.add_subcommand("run", "Run the project");
@@ -49,25 +50,38 @@ int main(int argc, char** argv){
   auto publish_proj = app.add_subcommand("publish", "Publish the project (To be added)");
 
   bool lib_flag = false;
+  std::string proj_name;
+  new_proj->add_option("name", proj_name, "Create a library project");
   new_proj->add_flag("--lib", lib_flag, "Create a library project");
   
-  new_proj->callback([&]() {});
+  new_proj->callback([&]() {
+    std::cout << new_proj->get_option("name")->as<std::string>() << std::endl;
+    std::cout << lib_flag << std::endl;
+  });
 
   
   bool kubernetes_flag = false, docker_flag = false;
-  std::string arch, target, mode;
+  std::string arch("auto"), target("build"), mode("release");
   build_proj->add_flag("-k", kubernetes_flag);
   build_proj->add_flag("-d", docker_flag);
   build_proj->add_option("--arch", arch, "Architecture of the target system");
   build_proj->add_option("--target", target, "Target directory for the build");
   build_proj->add_option("-m", mode, "Build mode (debug, release)");
 
-  build_proj->callback([&]() {});
+  build_proj->callback([&]() {
+    std::cout << kubernetes_flag << " " << docker_flag << " " << arch << " " << target << " " << mode << std::endl;
+  });
 
 
-  auto run = app.add_subcommand("run", "Run the project");
-  run->add_option("--mode", mode, "Build type (Debug, Release)");
-  run->callback([&]() {});
+  run_proj->add_flag("-k", kubernetes_flag);
+  run_proj->add_flag("-d", docker_flag);
+  run_proj->add_option("--arch", arch, "Architecture of the target system");
+  run_proj->add_option("--target", target, "Target directory for the build");
+  run_proj->add_option("-m", mode, "Build mode (debug, release)");
+  
+  run_proj->callback([&]() {
+    std::cout << kubernetes_flag << " " << docker_flag << " " << arch << " " << target << " " << mode << std::endl;
+  });
 
 
   test_proj->callback([&]() {});
@@ -76,14 +90,18 @@ int main(int argc, char** argv){
 
   bool github_flag = false;
   std::string package_name;
-  install_proj->add_flag("-g", github_flag, "Install from github");
-  install_proj->get_option("")->required();
+  install_proj->add_flag("-g", github_flag, "Install from github"); // with or without https://github.com is fine
+  install_proj->add_option("library")->required();
 
-  install_proj->callback([&]() {});
+  install_proj->callback([&]() {
+    std::cout << install_proj->get_option("library")->as<std::string>() << " " << github_flag << std::endl;
+  });
 
 
-  uninstall_proj->add_option("")->required();
-  uninstall_proj->callback([&]() {});
+  uninstall_proj->add_option("library")->required();
+  uninstall_proj->callback([&]() {
+    std::cout << uninstall_proj->get_option("library")->as<std::string>() << std::endl;
+  });
 
 
   analyze_proj->callback([&]() {});
@@ -91,16 +109,16 @@ int main(int argc, char** argv){
 
   bool global_flag = false;
   std::string key, value;
-  config_proj->add_option("--key", key
-    , "Key for the configuration");
-  config_proj->add_option("--value", value
-    , "Value for the configuration");
   config_proj->add_flag("-g", global_flag, "Set global configuration");
-  config_proj->callback([&]() {});
+  config_proj->add_option("key", key, "Key for the configuration");
+  config_proj->add_option("value", value, "Value for the configuration");
+  config_proj->callback([&]() {
+    std::cout << key << " " << value << " " << global_flag << std::endl;
+  });
 
 
   publish_proj->callback([&]() {});
-  
+
 
   CLI11_PARSE(app, argc, argv);
 

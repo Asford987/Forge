@@ -10,8 +10,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 add_subdirectory(libs/CLI11)
 add_subdirectory(libs/tomlplusplus)
 
-add_executable(forge source/forge/forge.cpp)
-install(TARGETS forge DESTINATION bin)
+add_executable(forge src/main/forge.cpp)
+# install(TARGETS forge DESTINATION bin)
 
 target_link_libraries(forge PRIVATE CLI11::CLI11)
 
