@@ -47,6 +47,12 @@ int main(int argc, char** argv){
   auto analyze_proj = app.add_subcommand("analyze", "Analyze the code for vulnerabilities");
   auto config_proj = app.add_subcommand("config", "Set configuration for the project or globally");
   auto publish_proj = app.add_subcommand("publish", "Publish the project (To be added)");
+
+  bool lib_flag = false;
+  new_proj->add_flag("--lib", lib_flag, "Create a library project");
+  
+  new_proj->callback([&]() {});
+
   
   bool kubernetes_flag = false, docker_flag = false;
   std::string arch, target, mode;
@@ -56,20 +62,46 @@ int main(int argc, char** argv){
   build_proj->add_option("--target", target, "Target directory for the build");
   build_proj->add_option("-m", mode, "Build mode (debug, release)");
 
+  build_proj->callback([&]() {});
+
+
   auto run = app.add_subcommand("run", "Run the project");
   run->add_option("--mode", mode, "Build type (Debug, Release)");
-    run->callback([&]() {
-        // if (mode.empty()) {
-        //     mode = get_config("mode", false);
-        //     if (mode.empty()) {
-        //         mode = "Debug"; // Default build type
-        //     }
-        // }
-        std::cout << "Running the project with build type: " << mode << std::endl;
-        // Add code to run the project using the specified build type
-    });
+  run->callback([&]() {});
 
 
-    CLI11_PARSE(app, argc, argv);
+  test_proj->callback([&]() {});
+  bench_proj->callback([&]() {});
+
+
+  bool github_flag = false;
+  std::string package_name;
+  install_proj->add_flag("-g", github_flag, "Install from github");
+  install_proj->get_option("")->required();
+
+  install_proj->callback([&]() {});
+
+
+  uninstall_proj->add_option("")->required();
+  uninstall_proj->callback([&]() {});
+
+
+  analyze_proj->callback([&]() {});
+
+
+  bool global_flag = false;
+  std::string key, value;
+  config_proj->add_option("--key", key
+    , "Key for the configuration");
+  config_proj->add_option("--value", value
+    , "Value for the configuration");
+  config_proj->add_flag("-g", global_flag, "Set global configuration");
+  config_proj->callback([&]() {});
+
+
+  publish_proj->callback([&]() {});
+  
+
+  CLI11_PARSE(app, argc, argv);
 
 }
