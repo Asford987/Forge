@@ -6,8 +6,11 @@
 #include <functional>
 #include <stdexcept>
 #include <map>
+
 #include <CLI/CLI.hpp>
 #include <toml++/toml.h>
+#include <nlohmann/json.hpp>
+
 #include "executables/utils.hpp"
 #include "executables/Analyze.hpp"
 #include "executables/Build.hpp"
