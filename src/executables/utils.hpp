@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -6,11 +8,22 @@
 #include <memory>
 #include <curl/curl.h>
 #include <nlohmann/json.hpp>
+#include <filesystem>
+#include <fstream>
 
 using json=nlohmann::json;
 
 namespace Forge
 {
+
+  std::string get_forge_home() {
+    char* forge_home = std::getenv("FORGE_HOME");
+    if (!forge_home) {
+      std::cerr << "FORGE_HOME environment variable is not set." << std::endl;
+      exit(1);
+    }
+    return std::string(forge_home);
+  }
 
   void execute_command(const std::string& command) {
     if (std::system(command.c_str()) != 0) {
@@ -62,25 +75,48 @@ namespace Forge
     return "0.0.1"; 
   }
 
-  std::map<std::string, std::string> get_global_config(){
-
-  }
-
-  std::map<std::string, std::string> get_local_config(){
-    
-  }
-
-  std::map<std::string, std::string> get_config(){
-    auto config = get_local_config();
-    auto global_config = get_global_config();
-
-    for (const auto& [key, value] : global_config) {
-      if (config.find(key) == config.end()) {
-        config[key] = value;
-      }
+  json get_global_config(){
+    std::string forge_home = get_forge_home();
+    std::ifstream config_file(forge_home + "/config/config.json");
+    json config;
+    if (config_file.is_open()) {
+      config_file >> config;
     }
-
     return config;
   }
+
+  json get_local_config(){
+    std::ifstream config_file(".config.json");
+    json config;
+    if (config_file.is_open()) {
+      config_file >> config;
+    }
+    return config;
+  }
+
+  json get_config(){
+    auto config = get_local_config();
+    auto global_config = get_global_config();
+    for (auto it = global_config.begin(); it != global_config.end(); ++it) {
+      if (config.find(it.key()) == config.end()) {
+        config[it.key()] = it.value();
+      }
+    }
+    return config;
+  }
+
+  void set_global_config(json config){
+    std::string forge_home = get_forge_home();
+    std::ofstream config_file(forge_home + "/config/config.json");
+    config_file << config.dump(2);
+    config_file.close();
+  }
+
+  void set_local_config(json config){
+    std::ofstream config_file(".config.json");
+    config_file << config.dump(2);
+    config_file.close();
+  }
+  
 
 } // namespace Forge

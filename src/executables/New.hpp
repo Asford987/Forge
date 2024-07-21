@@ -1,7 +1,13 @@
+#pragma once
+
 #include <iostream>
 #include <filesystem>
 #include <cstdlib>
+#include <nlohmann/json.hpp>
+#include <fstream>
+#include "utils.hpp"
 
+using json=nlohmann::json;
 
 
 namespace Forge
@@ -18,12 +24,16 @@ namespace Forge
         execute_command(command);
         std::filesystem::current_path(project_name);
 
+        json forge_global_configs = get_global_config();
+
         git_init();
         create_src();
         create_cmake();
         create_forge_toml();
-        create_test();
-        create_bench();
+        if(forge_global_configs.contains("initializeWithTest") && forge_global_configs["initializeWithTest"])
+          create_test();
+        if(forge_global_configs.contains("initializeWithBench") && forge_global_configs["initializeWithBench"])
+          create_bench();
         create_docs();
         generate_init();
         create_run_cmake();
@@ -82,17 +92,17 @@ namespace Forge
       }
 
       void generate_bin_run(){
-        std::string file_contents = read_file(get_forge_home() + "/src/files/CMake/run.cmake");
+        std::string file_contents = read_file(get_forge_home() + "/files/CMake/run.cmake");
         write_file(".CMake/run.cmake", file_contents);
       }
 
       void generate_lib_run(){
-        std::string file_contents = read_file(get_forge_home() + "/src/files/CMake/lib.cmake");
+        std::string file_contents = read_file(get_forge_home() + "/files/CMake/lib.cmake");
         write_file(".CMake/run.cmake", file_contents);
       }
 
       void generate_init(){
-        std::string file_contents = read_file(get_forge_home() + "/src/files/CMake/init.cmake");
+        std::string file_contents = read_file(get_forge_home() + "/files/CMake/init.cmake");
         file_contents = file_contents.replace(file_contents.find("PROJECT_NAME"), 12, project_name);
         write_file(".CMake/init.cmake", file_contents);
       }
@@ -120,15 +130,6 @@ namespace Forge
 
       std::string project_name;
       bool _is_library;
-
-      std::string get_forge_home() {
-        char* forge_home = std::getenv("FORGE_HOME");
-        if (!forge_home) {
-          std::cerr << "FORGE_HOME environment variable is not set." << std::endl;
-          exit(1);
-        }
-        return std::string(forge_home);
-      }
   
   };
 
