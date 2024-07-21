@@ -26,6 +26,11 @@ namespace Forge
         
       void run_project(){        
         build_project();
+        run();
+      }
+
+      void run(){
+        
       }
   };
   

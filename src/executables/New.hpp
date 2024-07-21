@@ -44,7 +44,7 @@ namespace Forge
       }
 
       void create_cmake(){
-        std::string command = "mkdir CMake";
+        std::string command = "mkdir .CMake";
         execute_command(command);
         command = "touch CMakeLists.txt";
         execute_command(command);
@@ -77,28 +77,24 @@ namespace Forge
       }
 
       void create_run_cmake(){
-        std::string command = "touch CMake/run.cmake";
-        execute_command(command);
         if(_is_library) generate_lib_run();
         else generate_bin_run();
       }
 
       void generate_bin_run(){
-        std::string file_contents = read_file(std::string(std::getenv("FORGE_HOME")) + "/src/files/CMake/run.cmake");
-      
+        std::string file_contents = read_file(get_forge_home() + "/src/files/CMake/run.cmake");
+        write_file(".CMake/run.cmake", file_contents);
       }
 
       void generate_lib_run(){
-        std::string file_contents = read_file(std::string(std::getenv("FORGE_HOME")) + "/src/files/CMake/lib.cmake");
-
+        std::string file_contents = read_file(get_forge_home() + "/src/files/CMake/lib.cmake");
+        write_file(".CMake/run.cmake", file_contents);
       }
 
       void generate_init(){
-        std::string file_contents = read_file(std::string(std::getenv("FORGE_HOME")) + "/src/files/CMake/init.cmake");
-
+        std::string file_contents = read_file(get_forge_home() + "/src/files/CMake/init.cmake");
         file_contents = file_contents.replace(file_contents.find("PROJECT_NAME"), 12, project_name);
-
-        write_file("CMake/init.cmake", file_contents);
+        write_file(".CMake/init.cmake", file_contents);
       }
 
       std::string read_file(std::string file){
@@ -110,17 +106,30 @@ namespace Forge
           file_contents += str;
           file_contents.push_back('\n');
         }
+        base_init.close();
         return file_contents;
       }
 
-      std::string write_file(std::string file, std::string contents){
+      void write_file(std::string file, std::string contents){
         std::ofstream init_cmake(file);
         init_cmake << contents;
+        init_cmake.close();
       }
 
     private:
+
       std::string project_name;
       bool _is_library;
+
+      std::string get_forge_home() {
+        char* forge_home = std::getenv("FORGE_HOME");
+        if (!forge_home) {
+          std::cerr << "FORGE_HOME environment variable is not set." << std::endl;
+          exit(1);
+        }
+        return std::string(forge_home);
+      }
+  
   };
 
 } // namespace Forge

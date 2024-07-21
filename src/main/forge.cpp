@@ -33,7 +33,8 @@ int main(int argc, char** argv){
 
   bool lib_flag = false;
   std::string proj_name;
-  new_proj->add_option("name", proj_name, "Create a library project");
+  new_proj->set_help_flag("-h, --help", "Display this information");
+  new_proj->add_option("name", proj_name, "Name of the project");
   new_proj->add_flag("--lib", lib_flag, "Create a library project");
   
   new_proj->callback([&]() {
@@ -43,6 +44,7 @@ int main(int argc, char** argv){
   
   bool kubernetes_flag = false, docker_flag = false;
   std::string arch("auto"), target("build"), mode("release");
+  build_proj->set_help_flag("-h, --help", "Display this information");
   build_proj->add_flag("-k", kubernetes_flag, "Build for kubernetes");
   build_proj->add_flag("--kubernetes", kubernetes_flag, "Build for kubernetes");
   build_proj->add_flag("-d", docker_flag, "Build for docker");
@@ -58,6 +60,7 @@ int main(int argc, char** argv){
   });
 
 
+  run_proj->set_help_flag("-h, --help", "Display this information");
   run_proj->add_flag("-k", kubernetes_flag, "Build for kubernetes");
   run_proj->add_flag("--kubernetes", kubernetes_flag, "Build for kubernetes");
   run_proj->add_flag("-d", docker_flag, "Build for docker");
@@ -73,10 +76,13 @@ int main(int argc, char** argv){
   });
 
 
+  test_proj->set_help_flag("-h, --help", "Display this information");
   test_proj->callback([&]() {
     Forge::Test().run_tests();
   });
 
+  
+  bench_proj->set_help_flag("-h, --help", "Display this information");
   bench_proj->callback([&]() {
     Forge::Bench().run_benchmarks();
   });
@@ -85,6 +91,7 @@ int main(int argc, char** argv){
   bool global_install = false;
   bool github_flag = false;
   std::string package_name;
+  install_proj->set_help_flag("-h, --help", "Display this information");
   install_proj->add_flag("-g", global_install, "Install package globally"); 
   install_proj->add_flag("--global", global_install, "Install package globally"); 
   install_proj->add_flag("--github", github_flag, "Install from github"); // with or without https://github.com is fine
@@ -97,6 +104,7 @@ int main(int argc, char** argv){
   });
 
 
+  uninstall_proj->set_help_flag("-h, --help", "Display this information");
   uninstall_proj->add_option("library")->required();
   uninstall_proj->add_flag("-g", global_install, "Install package globally"); 
   uninstall_proj->callback([&]() {
@@ -106,6 +114,7 @@ int main(int argc, char** argv){
   });
 
 
+  analyze_proj->set_help_flag("-h, --help", "Display this information");
   analyze_proj->callback([&]() {
     Forge::Analyze().analyze_code();
   });
@@ -113,6 +122,7 @@ int main(int argc, char** argv){
 
   bool global_flag = false;
   std::string key, value;
+  config_proj->set_help_flag("-h, --help", "Display this information");
   config_proj->add_flag("-g", global_flag, "Set global configuration");
   config_proj->add_flag("--global", global_flag, "Set global configuration");
   config_proj->add_option("key", key, "Key for the configuration");
@@ -125,6 +135,7 @@ int main(int argc, char** argv){
   });
 
 
+  publish_proj->set_help_flag("-h, --help", "Display this information");
   publish_proj->callback([&]() {
     Forge::Publish("").publish_package();
   });
