@@ -24,6 +24,7 @@ namespace Forge
         create_test();
         create_bench();
         create_docs();
+        generate_init();
         create_run_cmake();
       }
 
@@ -81,15 +82,28 @@ namespace Forge
         else generate_bin_run();
       }
 
-      void generate_lib_run(){
-        std::string file="CMake/run.cmake";
-        
-        std::ofstream run_cmake(file);
+      void generate_bin_run(){}
 
-      }
+      void generate_lib_run(){}
 
-      void generate_bin_run(){
+      void generate_init(){
+        std::ifstream base_init("files/CMake/init.cmake");
+        std::string str;
+        std::string file_contents;
+        while (std::getline(base_init, str))
+        {
+          file_contents += str;
+          file_contents.push_back('\n');
+        }
 
+        while(file_contents.find("PROJECT_NAME") != std::string::npos)
+          file_contents = file_contents.replace(file_contents.find("PROJECT_NAME"), 12, project_name);
+        while(file_contents.find("CMAKE_VERSION") != std::string::npos)
+          file_contents = file_contents.replace(file_contents.find("CMAKE_VERSION"), 13, fetch_cmake_version());
+
+        std::string file="CMake/init.cmake";
+        std::ofstream init_cmake(file);
+        init_cmake << file_contents;
       }
 
     private:
