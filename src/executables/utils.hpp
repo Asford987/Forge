@@ -5,7 +5,9 @@
 #include <array>
 #include <memory>
 #include <curl/curl.h>
+#include <nlohmann/json.hpp>
 
+using json=nlohmann::json;
 
 namespace Forge
 {
@@ -52,25 +54,12 @@ namespace Forge
 
     curl_global_cleanup();
 
-    auto json = nlohmann::json::parse(readBuffer);
-    return json["tag_name"].get<std::string>();
+    auto js = json::parse(readBuffer);
+    return js["tag_name"].get<std::string>();
   }
 
   std::string get_version(){
     return "0.0.1"; 
-  }
-
-  std::string fetch_cmake_version(){
-    std::array<char, 128> buffer;
-    std::string result;
-    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen("cmake --version", "r"), pclose);
-    if (!pipe) {
-        throw std::runtime_error("popen() failed!");
-    }
-    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
-        result += buffer.data();
-    }
-    return result;
   }
 
   std::map<std::string, std::string> get_global_config(){

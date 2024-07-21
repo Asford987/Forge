@@ -1,5 +1,6 @@
 #include <iostream>
 #include <filesystem>
+#include <cstdlib>
 
 
 
@@ -82,12 +83,26 @@ namespace Forge
         else generate_bin_run();
       }
 
-      void generate_bin_run(){}
+      void generate_bin_run(){
+        std::string file_contents = read_file(std::string(std::getenv("FORGE_HOME")) + "/src/files/CMake/run.cmake");
+      
+      }
 
-      void generate_lib_run(){}
+      void generate_lib_run(){
+        std::string file_contents = read_file(std::string(std::getenv("FORGE_HOME")) + "/src/files/CMake/lib.cmake");
+
+      }
 
       void generate_init(){
-        std::ifstream base_init("files/CMake/init.cmake");
+        std::string file_contents = read_file(std::string(std::getenv("FORGE_HOME")) + "/src/files/CMake/init.cmake");
+
+        file_contents = file_contents.replace(file_contents.find("PROJECT_NAME"), 12, project_name);
+
+        write_file("CMake/init.cmake", file_contents);
+      }
+
+      std::string read_file(std::string file){
+        std::ifstream base_init(file);
         std::string str;
         std::string file_contents;
         while (std::getline(base_init, str))
@@ -95,15 +110,12 @@ namespace Forge
           file_contents += str;
           file_contents.push_back('\n');
         }
+        return file_contents;
+      }
 
-        while(file_contents.find("PROJECT_NAME") != std::string::npos)
-          file_contents = file_contents.replace(file_contents.find("PROJECT_NAME"), 12, project_name);
-        while(file_contents.find("CMAKE_VERSION") != std::string::npos)
-          file_contents = file_contents.replace(file_contents.find("CMAKE_VERSION"), 13, fetch_cmake_version());
-
-        std::string file="CMake/init.cmake";
+      std::string write_file(std::string file, std::string contents){
         std::ofstream init_cmake(file);
-        init_cmake << file_contents;
+        init_cmake << contents;
       }
 
     private:
