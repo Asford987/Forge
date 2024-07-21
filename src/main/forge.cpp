@@ -86,6 +86,7 @@ int main(int argc, char** argv){
   bool github_flag = false;
   std::string package_name;
   install_proj->add_flag("-g", global_install, "Install package globally"); 
+  install_proj->add_flag("--global", global_install, "Install package globally"); 
   install_proj->add_flag("--github", github_flag, "Install from github"); // with or without https://github.com is fine
   install_proj->add_option("library")->required();
 

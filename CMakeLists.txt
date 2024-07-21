@@ -34,9 +34,6 @@ FetchContent_Declare(
   GIT_TAG curl-8_8_0
 )
     
-set(JSON_BuildTests OFF CACHE INTERNAL "")
-set(JSON_Install OFF CACHE INTERNAL "")
-
 FetchContent_MakeAvailable(json CLI11 tomlplusplus curl)
 
 add_executable(forge src/main/forge.cpp)
