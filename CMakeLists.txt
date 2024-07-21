@@ -33,7 +33,10 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/curl/curl
   GIT_TAG curl-8_8_0
 )
-    
+ 
+set(JSON_BuildTests OFF CACHE INTERNAL "")
+set(JSON_Install OFF CACHE INTERNAL "")
+
 FetchContent_MakeAvailable(json CLI11 tomlplusplus curl)
 
 add_executable(forge src/main/forge.cpp)
@@ -42,3 +45,4 @@ add_executable(forge src/main/forge.cpp)
 target_link_libraries(forge PRIVATE CLI11::CLI11)
 target_link_libraries(forge PRIVATE nlohmann_json::nlohmann_json)
 target_link_libraries(forge PRIVATE tomlplusplus::tomlplusplus)
+target_link_libraries(forge PRIVATE CURL::libcurl)

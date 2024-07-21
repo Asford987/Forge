@@ -15,25 +15,18 @@ namespace Forge
       void build_project(){
         std::cout << kubernetes_flag << " " << docker_flag << " " << arch << " " << target << " " << mode << std::endl;
       }
-    private:
+    protected:
       bool kubernetes_flag, docker_flag;
       std::string arch, target, mode;
   };
-  class Run{
+  class Run: public Build{
     public:
-      Run(bool kubernetes_flag, bool docker_flag, std::string arch, std::string target, std::string mode){
-        this->kubernetes_flag = kubernetes_flag;
-        this->docker_flag = docker_flag;
-        this->arch = arch;
-        this->target = target;
-        this->mode = mode;
+      Run(bool kubernetes_flag, bool docker_flag, std::string arch, std::string target, std::string mode):
+        Build(kubernetes_flag, docker_flag, arch, target, mode){}
+        
+      void run_project(){        
+        build_project();
       }
-      void run_project(){
-        std::cout << kubernetes_flag << " " << docker_flag << " " << arch << " " << target << " " << mode << std::endl;
-      }
-    private:
-      bool kubernetes_flag, docker_flag;
-      std::string arch, target, mode;
   };
   
 } // namespace Forge

@@ -82,6 +82,9 @@ namespace Forge
       }
 
       void generate_lib_run(){
+        std::string file="CMake/run.cmake";
+        
+        std::ofstream run_cmake(file);
 
       }
 
